@@ -1,8 +1,9 @@
 import './App.css';
 import React from 'react';
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, TextField, Grid, Card, CardContent, Typography, CardActions } from '@mui/material';
 import { toast } from 'react-toastify';
-
+import './dialog.js';
+import FormDialog from './dialog.js';
 
 class App extends React.Component {
   state = {
@@ -21,9 +22,11 @@ class App extends React.Component {
   }
 
   handleTitleChange = e => {
-    this.setState({
-      todo: {...this.state.todo, title: e.target.value}
-    });
+	if(e.target.value.length <= 32) {
+		this.setState({
+			todo: {...this.state.todo, title: e.target.value}
+		});
+	}
   }
 
   handleDescriptionChange = e => {
@@ -46,28 +49,32 @@ class App extends React.Component {
   }
 
   render() {
+	
     return (
-      <Box className="App">
-        <Box style={{textAlign: 'center', marginTop: '1rem'}}>
-          <Button onClick={this.toggleShowForm} variant="contained" color="primary">
-            { this.state.showForm ? "Hide" : "Show" } Form
-          </Button>
-          <Box sx={{ p: 2 }}>
-            <TextField value={this.state.todo.title}fullWidth variant="outlined" label="Title" />
-          </Box>
-          <Box sx={{ p: 2 }}>
-            <TextField fullWidth variant="outlined" label="Description" multiline maxRows />
-          </Box>
-          <Box sx={{ p: 2 }}>
-            <Button variant="outlined" color="primary">
-              Create
-            </Button>
-          </Box>
+    <Box className="App" style={{ margin: '2rem' }}>
+    	<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+			<h1>To Do List</h1>
+			<Button onClick={this.toggleShowForm} variant="contained" color="primary">
+            	{ this.state.showForm ? "Hide" : "Show" } Form
+        	</Button>
+		</Box>
+        <Box>
+        	{
+            	this.state.showForm ? 
+				<Box>
+					<Box>
+						<TextField sx={{ margin: '0.5rem 0' }} onChange={this.handleTitleChange} value={this.state.todo.title} fullWidth variant="outlined" label="Title" />
+						<TextField sx={{ margin: '0.5rem 0' }} onChange={this.handleDescriptionChange} value={this.state.todo.description} fullWidth variant="outlined" label="Description" />
+					</Box>
+					<Box>
+						<Button sx={{ margin: '0.5rem 0' }} onClick={this.handleCreateClick} variant="contained" color="success">Create</Button>
+					</Box>
+				</Box>
+            :
+              null 
+        	}
         </Box>
-        <Box sx={{ textAlign: 'center', mt: 3 }}>
-          <h3>Todo List</h3>
-        </Box>
-      </Box>
+    </Box>
     )
   }
 }
